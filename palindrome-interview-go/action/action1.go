@@ -2,9 +2,9 @@ package action
 
 import "regexp"
 
-func IsAPalindromeCandidate( s string ) bool {
+func IsStringAPalindromeCandidate(s string) bool {
 
-	matched, _ := regexp.Match( `^[a-z]*$`, []byte(s) )
+	matched, _ := regexp.Match(`^[a-z]*$`, []byte(s))
 
 	return matched
 }
