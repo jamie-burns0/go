@@ -61,3 +61,40 @@ func TestAnInvalidMapWithMultipleEntriesReturnsFalse( t *testing.T ) {
 		t.Errorf( "Expected false. Got true" )
 	}
 }
+
+func TestAMapWithAccentedLatinCharactersIsAPalindromeCandidate( t *testing.T ) {
+
+	m := map[string]int {
+		"à": 2,
+		"á": 2,
+		"â": 2,
+		"ã": 2,
+		"ä": 2,
+		"å": 2,
+		"ç": 2,
+		"è": 2,
+		"é": 2,
+		"ê": 2,
+		"ë": 2,
+		"ì": 2,
+		"í": 2,
+		"î": 2,
+		"ï": 2,
+		"ñ": 2,
+		"ò": 2,
+		"ó": 2,
+		"ô": 2,
+		"õ": 2,
+		"ö": 2,
+		"ù": 2,
+		"ú": 2,
+		"û": 2,
+		"ü": 2,
+		"ý": 2,
+		"ÿ": 2,
+	}
+
+	if ! action.IsFreqCharacterMapAPalindromeCandidate( m ) {
+		t.Errorf( "Expected true. Got false" )
+	}
+}

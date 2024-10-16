@@ -60,3 +60,18 @@ func TestAValidMapReturnsAPalindrome( t *testing.T ) {
 		t.Errorf( "Expected palindrome 'accbcca'. Got %v", p3 )
 	}
 }
+
+func TestAMapWithAccentedLatinCharactersReturnsAPalindromeWithTheAccentedCharacters( t *testing.T ) {
+
+	m := map[string]int {
+		"á": 1,
+		"â": 2,
+		"ç": 2,
+	}
+
+	p := action.MakePalindromeFromFreqCharacterMap( m )
+
+	if p != "âçáçâ" {
+		t.Errorf( "Expected palindrome 'âçáçâ'. Got %v", p )
+	}
+}

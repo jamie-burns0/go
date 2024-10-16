@@ -104,3 +104,22 @@ func TestAStringWithMultipleOccurancesEachOfMultipleCharactersReturnsAMapWithMul
 		t.Errorf( "Expected frequency map to contain 'b'")
 	}
 }
+
+func TestAStringWithAccentedLatinCharactersReturnsAMapThatIncludesTheAccentedCharacters( t *testing.T ) {
+
+	s := "áááá"
+
+	m := action.FrequencyOfCharacterMap( s )
+
+	if len(m) != 1 {
+		t.Errorf( "Expected one entry. Got %v", len(m) )
+	}
+
+	if v, ok := m["á"]; ok {
+		if v != 4 {
+			t.Errorf( "Expected frequency of 'á' to be 4. Got %d", v)
+		}
+	} else {
+		t.Errorf( "Expected frequency map to contain 'á'")
+	}
+}

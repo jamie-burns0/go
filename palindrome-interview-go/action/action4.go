@@ -2,7 +2,6 @@ package action
 
 import (
 	"sort"
-	"strings"
 )
 
 func MakePalindromeFromFreqCharacterMap( freqCharacterMap map[string]int ) string {
@@ -21,7 +20,7 @@ func MakePalindromeFromFreqCharacterMap( freqCharacterMap map[string]int ) strin
 
 	sort.Strings(keyList)
 
-	palindrome := make([]string, palindromeLength)
+	palindrome := make([]rune, palindromeLength)
 
 	left := 0
 	right := palindromeLength - 1
@@ -29,16 +28,17 @@ func MakePalindromeFromFreqCharacterMap( freqCharacterMap map[string]int ) strin
 	for _, k := range keyList {
 
 		count := freqCharacterMap[k]
+		r := []rune(k)[0]
 
 		if count % 2 == 1 {
-			palindrome[palindromeLength / 2] = k
+			palindrome[palindromeLength / 2] = r
 			count--
 		}
 
 		for ; count > 0; {
 
-			palindrome[left] = k
-			palindrome[right] = k
+			palindrome[left] = r
+			palindrome[right] = r
 
 			left++
 			right--
@@ -47,5 +47,5 @@ func MakePalindromeFromFreqCharacterMap( freqCharacterMap map[string]int ) strin
 		}
 	}
 
-	return strings.Join(palindrome, "")
+	return string(palindrome)
 }

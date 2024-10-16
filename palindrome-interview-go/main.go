@@ -8,5 +8,5 @@ import (
 
 func main() {
 
-	fmt.Println( workflow.Execute( "abccbaddddd" ) )
+	fmt.Println(workflow.Execute("abccbööaddddé"))
 }
