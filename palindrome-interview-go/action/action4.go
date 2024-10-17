@@ -1,24 +1,23 @@
 package action
 
 import (
-	"sort"
+	"slices"
+	"maps"
 )
 
 func MakePalindromeFromFreqCharacterMap( freqCharacterMap map[string]int ) string {
-	
+
 	if len( freqCharacterMap ) == 0 {
 		return ""
 	}
 
 	var palindromeLength int
-	var keyList []string
 
-	for k,v := range freqCharacterMap {
+	for _,v := range freqCharacterMap {
 		palindromeLength += v
-		keyList = append(keyList, k)
 	}
 
-	sort.Strings(keyList)
+	keyList := slices.Sorted(maps.Keys(freqCharacterMap))
 
 	palindrome := make([]rune, palindromeLength)
 
