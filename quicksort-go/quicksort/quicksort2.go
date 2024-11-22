@@ -34,8 +34,9 @@ func Sort2[T ordered](list []T) []T {
 
 		pivotIndex, inOrder := partition2(leftIndex, rightIndex, pivotValue, list)
 
-		if inOrder || (rightIndex-leftIndex) <= maxGuaranteedSortedSegmentSize {
-			continue // nothing more to do here - this segment of our list is guaranteed to be sorted
+		if inOrder || (rightIndex - leftIndex) <= unsegmentable {
+			continue	// this segment is too small to be segmented
+						// and will be in order
 		}
 
 		if pivotIndex > leftIndex { // push our left segment onto the stack for partitioning
@@ -143,7 +144,7 @@ func partition2[T ordered](leftIndex int, rightIndex int, pivotValue T, list []T
 			}
 		}
 
-		if leftIndex < len(list) - 1 {
+		if leftIndex < len(list)-1 {
 			if list[leftIndex] > list[leftIndex+1] {
 				inOrder = false
 			}
@@ -156,7 +157,7 @@ func partition2[T ordered](leftIndex int, rightIndex int, pivotValue T, list []T
 			}
 		}
 
-		if rightIndex < len(list) - 1 {
+		if rightIndex < len(list)-1 {
 			if list[rightIndex] < list[rightIndex+1] {
 				inOrder = false
 			}

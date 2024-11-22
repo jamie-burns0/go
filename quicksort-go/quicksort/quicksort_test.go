@@ -22,6 +22,18 @@ func TestSort(t *testing.T) {
 		}
 	})
 
+	t.Run("Test 1b - list that wasn't being sorted correctly", func(t *testing.T) {
+
+		list := []int{5,10,1,3,2,4}
+		expectedList := []int{1, 2, 3, 4, 5, 10}
+
+		Sort(list)
+
+		if !reflect.DeepEqual(list, expectedList) {
+			t.Errorf("Expected list to be %v. Got %v", expectedList, list)
+		}
+	})
+
 	t.Run("Test 2 - with one item in list", func(t *testing.T) {
 
 		list := []int{8}
@@ -120,11 +132,13 @@ func _testPerformanceImpl(t *testing.T, noOfItemsToSort int, maxSortValue int) s
 		t.Logf("Before Sort with %v items between 0-%v\n", noOfItemsToSort, maxSortValue)
 
 		start := time.Now()
-		Sort(unsortedInts)
+		sortedInts := Sort(unsortedInts)
 		elapsed := time.Since(start)
 
 		t.Logf("After Sort. Elapsed time is %v\n", elapsed)
 		csv += fmt.Sprintf(",%v", elapsed.Milliseconds())
+
+		_testForOrder(t, sortedInts, "Sort")
 	}
 
 	{
@@ -134,11 +148,13 @@ func _testPerformanceImpl(t *testing.T, noOfItemsToSort int, maxSortValue int) s
 		t.Logf("Before Sort2 with %v items between 0-%v\n", noOfItemsToSort, maxSortValue)
 
 		start := time.Now()
-		Sort2(unsortedInts)
+		sortedInts := Sort2(unsortedInts)
 		elapsed := time.Since(start)
 
 		t.Logf("After Sort2. Elapsed time is %v\n", elapsed)
 		csv += fmt.Sprintf(",%v", elapsed.Milliseconds())
+
+		_testForOrder(t, sortedInts, "Sort2")
 	}
 
 	{
@@ -148,11 +164,13 @@ func _testPerformanceImpl(t *testing.T, noOfItemsToSort int, maxSortValue int) s
 		t.Logf("Before AsyncSort with %v items between 0-%v\n", noOfItemsToSort, maxSortValue)
 
 		start := time.Now()
-		AsyncSort(unsortedInts)
+		sortedInts := AsyncSort(unsortedInts)
 		elapsed := time.Since(start)
 
 		t.Logf("After AsyncSort. Elapsed time is %v\n", elapsed)
 		csv += fmt.Sprintf(",%v", elapsed.Milliseconds())
+
+		_testForOrder(t, sortedInts, "AsyncSort")
 	}
 
 	{
@@ -162,11 +180,13 @@ func _testPerformanceImpl(t *testing.T, noOfItemsToSort int, maxSortValue int) s
 		t.Logf("Before AsyncSortB with %v items between 0-%v\n", noOfItemsToSort, maxSortValue)
 
 		start := time.Now()
-		AsyncSortB(unsortedInts)
+		sortedInts := AsyncSortB(unsortedInts)
 		elapsed := time.Since(start)
 
 		t.Logf("After AsyncSortB. Elapsed time is %v\n", elapsed)
 		csv += fmt.Sprintf(",%v", elapsed.Milliseconds())
+
+		_testForOrder(t, sortedInts, "AsyncSortB")
 	}
 
 	{
@@ -176,11 +196,13 @@ func _testPerformanceImpl(t *testing.T, noOfItemsToSort int, maxSortValue int) s
 		t.Logf("Before AsyncSort2 with %v items between 0-%v\n", noOfItemsToSort, maxSortValue)
 
 		start := time.Now()
-		AsyncSort2(unsortedInts)
+		sortedInts := AsyncSort2(unsortedInts)
 		elapsed := time.Since(start)
 
 		t.Logf("After AsyncSort2. Elapsed time is %v\n", elapsed)
 		csv += fmt.Sprintf(",%v", elapsed.Milliseconds())
+
+		_testForOrder(t, sortedInts, "AsyncSort2")
 	}
 
 	{
@@ -190,16 +212,32 @@ func _testPerformanceImpl(t *testing.T, noOfItemsToSort int, maxSortValue int) s
 		t.Logf("Before AsyncSort2B with %v items between 0-%v\n", noOfItemsToSort, maxSortValue)
 
 		start := time.Now()
-		AsyncSort2B(unsortedInts)
+		sortedInts := AsyncSort2B(unsortedInts)
 		elapsed := time.Since(start)
 
 		t.Logf("After Sort. Elapsed time is %v\n", elapsed)
 		csv += fmt.Sprintf(",%v", elapsed.Milliseconds())
+
+		_testForOrder(t, sortedInts, "AsyncSort2B")
 	}
 
-	csv += fmt.Sprintf("\n")
+	csv += "\n"
 
 	return csv
+}
+
+func _testForOrder(t *testing.T, sortedInts []int, sortedBy string) {
+	inOrder := true
+	lastElementIndex := len(sortedInts) - 1
+	for i := 0; i < lastElementIndex; i++ {
+		if sortedInts[i] > sortedInts[i+1] {
+			inOrder = false
+		}
+	}
+
+	if !inOrder {
+		t.Errorf("Expected list returned by %v to be in order", sortedBy)
+	}
 }
 
 func TestSwap(t *testing.T) {

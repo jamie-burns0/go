@@ -1,8 +1,6 @@
 package quicksort
 
-import (
-	//"log"
-)
+//"log"
 
 // AsyncSort is an investigation into the value of breaking up Sort to run in
 // goroutines and pass data between the goroutines on channels. The implementation
@@ -26,7 +24,7 @@ import (
 // So while AsyncSort has been a good leap into learning about goroutines and
 // channels, our synchronous Sort is still by far the fastest way to sort a list
 // using Hoare's Quicksort algorithm with a midpoint pivot value strategy.
-func AsyncSortB[ T ordered](list []T) []T {
+func AsyncSortB[T ordered](list []T) []T {
 
 	//buffer := int(len(list)/20) + 1
 	buffer := int(len(list)) + 1
@@ -36,10 +34,10 @@ func AsyncSortB[ T ordered](list []T) []T {
 	doneChan := make(chan segment, buffer)
 
 	go func() { // get our pivotValue when a segment is available
-		
+
 		for seg := range segChan {
 			//log.Printf("<-segChan [%v]\n", seg)
-			
+
 			if seg.rightIndex <= seg.leftIndex { // drop bad segments
 				continue
 			}
@@ -69,19 +67,19 @@ func AsyncSortB[ T ordered](list []T) []T {
 			rightIndex := piSeg.segment.rightIndex
 			pivotIndex := piSeg.pivotIndex
 
-			if (rightIndex - leftIndex) <= maxGuaranteedSortedSegmentSize {
+			if (rightIndex - leftIndex) <= unsegmentable {
 				// if we got to here, this segment of our list is guaranteed to be sorted
-				// We can add our segment to 
+				// We can add our segment to
 				sendSegmentToDoneChan(leftIndex, rightIndex, doneChan)
 				continue
 			}
-	
+
 			if pivotIndex > leftIndex { // push our left segment onto the channel for partitioning
 				sendSegmentToSegChan(leftIndex, pivotIndex, segChan)
 			} else if pivotIndex == leftIndex { // our left segment is one item long
 				sendSegmentToDoneChan(leftIndex, leftIndex, doneChan)
 			}
-	
+
 			pivotIndexPlusOne := pivotIndex + 1
 
 			if pivotIndexPlusOne < rightIndex { // push our right segment onto the stack for partitioning
@@ -93,12 +91,12 @@ func AsyncSortB[ T ordered](list []T) []T {
 	}()
 
 	seedSegment := segment{
-		leftIndex: 0,
+		leftIndex:  0,
 		rightIndex: len(list) - 1,
 	}
 
 	//log.Printf("-segChan<- [%v] (seed segment)\n", seedSegment)
-	segChan<- seedSegment
+	segChan <- seedSegment
 	//log.Printf("+segChan<- [%v] (seed segment)\n", seedSegment)
 
 	remaining := len(list)

@@ -1,8 +1,6 @@
 package quicksort
 
-import (
-	//"log"
-)
+//"log"
 
 const partitionGoroutines = 4
 
@@ -28,7 +26,7 @@ const partitionGoroutines = 4
 // So while AsyncSort has been a good leap into learning about goroutines and
 // channels, our synchronous Sort is still by far the fastest way to sort a list
 // using Hoare's Quicksort algorithm with a midpoint pivot value strategy.
-func AsyncSort2[ T ordered](list []T) []T {
+func AsyncSort2[T ordered](list []T) []T {
 
 	// buffer := int(len(list)/20) + 1
 	buffer := int(len(list)) + 1
@@ -41,7 +39,7 @@ func AsyncSort2[ T ordered](list []T) []T {
 
 		for seg := range segChan {
 			//log.Printf("<-segChan [%v]\n", seg)
-			
+
 			if seg.rightIndex <= seg.leftIndex { // drop bad segments
 				continue
 			}
@@ -77,19 +75,19 @@ func AsyncSort2[ T ordered](list []T) []T {
 			rightIndex := piSeg.segment.rightIndex
 			pivotIndex := piSeg.pivotIndex
 
-			if (rightIndex - leftIndex) <= maxGuaranteedSortedSegmentSize {
+			if (rightIndex - leftIndex) <= unsegmentable {
 				// if we got to here, this segment of our list is guaranteed to be sorted
-				// We can add our segment to 
+				// We can add our segment to
 				sendSegmentToDoneChan2(leftIndex, rightIndex, doneChan)
 				continue
 			}
-	
+
 			if pivotIndex > leftIndex { // push our left segment onto the channel for partitioning
 				sendSegmentToSegChan2(leftIndex, pivotIndex, segChan)
 			} else if pivotIndex == leftIndex { // our left segment is one item long
 				sendSegmentToDoneChan2(leftIndex, leftIndex, doneChan)
 			}
-	
+
 			pivotIndexPlusOne := pivotIndex + 1
 
 			if pivotIndexPlusOne < rightIndex { // push our right segment onto the stack for partitioning
@@ -101,12 +99,12 @@ func AsyncSort2[ T ordered](list []T) []T {
 	}()
 
 	seedSegment := segment{
-		leftIndex: 0,
+		leftIndex:  0,
 		rightIndex: len(list) - 1,
 	}
 
 	//log.Printf("-segChan<- [%v] (seed segment)\n", seedSegment)
-	segChan<- seedSegment
+	segChan <- seedSegment
 	//log.Printf("+segChan<- [%v] (seed segment)\n", seedSegment)
 
 	remaining := len(list)
@@ -131,7 +129,7 @@ func AsyncSort2[ T ordered](list []T) []T {
 
 func sendSegmentToSegChan2(leftIndex int, rightIndex int, segChan chan<- segment) {
 	seg := segment{
-		leftIndex: leftIndex,
+		leftIndex:  leftIndex,
 		rightIndex: rightIndex,
 	}
 	//log.Printf("-segChan<- [%v]\n", seg)
@@ -139,17 +137,17 @@ func sendSegmentToSegChan2(leftIndex int, rightIndex int, segChan chan<- segment
 	// if segChanLen > maxSegChanLen {
 	// 	maxSegChanLen = segChanLen
 	// }
-	segChan<- seg
+	segChan <- seg
 	//log.Printf("+segChan<- [%v]\n", seg)
 }
 
 func sendSegmentToPivotValueChan2[T ordered](seg segment, pivotValue T, pivotValueChan chan<- pivotValueSegment[T]) {
 	pvSeg := pivotValueSegment[T]{
-		segment: seg,
+		segment:    seg,
 		pivotValue: pivotValue,
 	}
 	//log.Printf("pivotValueChan<- [%v]\n",pvSeg)
-	pivotValueChan<- pvSeg
+	pivotValueChan <- pvSeg
 }
 
 func sendSegmentToPivotIndexChan2(seg segment, pivotIndex int, pivotIndexChan chan<- pivotIndexSegment) {
@@ -164,10 +162,10 @@ func sendSegmentToPivotIndexChan2(seg segment, pivotIndex int, pivotIndexChan ch
 
 func sendSegmentToDoneChan2(leftIndex int, rightIndex int, doneChan chan<- segment) {
 	seg := segment{
-		leftIndex: leftIndex,
+		leftIndex:  leftIndex,
 		rightIndex: rightIndex,
 	}
 	//log.Printf("-doneChan<- [%v]\n", seg)
-	doneChan<- seg
+	doneChan <- seg
 	//log.Printf("+doneChan<- [%v]\n", seg)
 }
