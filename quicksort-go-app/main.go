@@ -7,8 +7,12 @@ import (
 	"github.com/jamie-burns0/quicksort-go/quicksort"
 )
 
-type RequestBody struct {
-	Data []int `json:"data"`
+type RequestJson struct {
+	UnsortedData []int `json:"data"`
+}
+
+type ResponseJson struct {
+	SortedData []int `json:"data"`
 }
 
 func main() {
@@ -17,14 +21,28 @@ func main() {
 	sorted := quicksort.Sort(unsorted)
 	fmt.Printf("sorted: %v\n", sorted)
 
-	body := `{"data":[5,10,1,3,2,4]}`
-	var requestBody RequestBody
+	fmt.Println("Sorting with JSON data...")
 
-	err := json.Unmarshal([]byte(body), &requestBody)
+	requestBody := `{"data":[5,10,1,3,2,4]}`
+	fmt.Printf("requestBody: %v\n", requestBody)
 
-	fmt.Println(requestBody.Data)
-	fmt.Println(err)
+	var requestJson RequestJson
 
-	sorted2 := quicksort.Sort(requestBody.Data)
+	err := json.Unmarshal([]byte(requestBody), &requestJson)
+	fmt.Printf("unmarshal err: %v\n", err)
+
+	sorted2 := quicksort.Sort(requestJson.UnsortedData)
 	fmt.Printf("sorted2: %v\n", sorted2)
+
+	responseJson := ResponseJson{
+		SortedData: sorted2,
+	}
+
+	jsonBytes, err := json.Marshal(responseJson)
+	fmt.Printf("marshal err: %v\n", err)
+
+	responseBody := string(jsonBytes)
+
+	fmt.Printf("responseBody: %v\n", responseBody)
+	fmt.Println(err)
 }
