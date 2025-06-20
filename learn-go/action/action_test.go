@@ -3,7 +3,7 @@ package action_test
 import (
 	"testing"
 
-	"jamieburns.me/go-demo-1/action"
+	"me.jamieburns/go-demo-1/action"
 )
 
 func TestAction( t *testing.T) {

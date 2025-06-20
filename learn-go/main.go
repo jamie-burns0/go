@@ -1,12 +1,24 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
 
-	"jamieburns.me/go-demo-1/action"
+	// "me.jamieburns/learn-go/action"
+	"me.jamieburns/learn-go/learn"
 )
 
 func main() {
-	fmt.Println(action.SaySomething())
-	fmt.Println(action.SaySomethingElse())
+	// fmt.Println(action.SaySomething())
+	// fmt.Println(action.SaySomethingElse())
+	
+	// learn.Learn01()
+	// learn.Learn02()
+	// learn.Learn02_02()
+	// learn.Learn02_03()
+	// learn.Learn02_04()
+	//learn.Learn03_01()
+	// learn.Learn03_02()
+	// learn.Learn03_03()
+	// learn.Learn03_04()
+	learn.Learn03_05()
 }

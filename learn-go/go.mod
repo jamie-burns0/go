@@ -1,4 +1,4 @@
-module jamieburns.me/go-demo-1
+module me.jamieburns/learn-go
 
 go 1.23.1
 
