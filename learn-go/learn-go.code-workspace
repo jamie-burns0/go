@@ -10,6 +10,6 @@
         "editor.inlineSuggest.showToolbar": "onHover",
         "editor.inlineSuggest.enabled": false,
         "editor.detectIndentation": false,
-        "go.goroot": "/opt/go/go1.23.1"
+        "files.autoSave": "afterDelay"
     }
 }
